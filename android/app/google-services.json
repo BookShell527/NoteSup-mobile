@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1086198739687",
+    "project_id": "notesup-abcff",
+    "storage_bucket": "notesup-abcff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086198739687:android:d43cb672744e9533d72842",
+        "android_client_info": {
+          "package_name": "com.BookShell527.NoteSup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1086198739687-5gms8dv6n978abok9dedflnnfufmjsa8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.BookShell527.NoteSup",
+            "certificate_hash": "7eedde88cf3c057b7374e581e903c7484107171d"
+          }
+        },
+        {
+          "client_id": "1086198739687-ac97lok0nfm3okk8ap6ghil59jmmm9bj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBD1aAUysORYl4Z6P0AsOAnbTNye1n1zJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1086198739687-ac97lok0nfm3okk8ap6ghil59jmmm9bj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
