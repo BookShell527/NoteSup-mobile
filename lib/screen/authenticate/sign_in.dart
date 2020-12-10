@@ -31,6 +31,7 @@ class _SignInState extends State<SignIn> {
         centerTitle: true
       ),
       body: Container(
+        color: Colors.grey[200],
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
           key: _formkey,
@@ -80,6 +81,32 @@ class _SignInState extends State<SignIn> {
                     }
                   }
                 }
+              ),
+              SizedBox(height: 20.0),
+              Container(
+                decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 2,
+                      offset: Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: MaterialButton(
+                  color: Colors.white,
+                  onPressed: () async {
+                    setState(() => loading = true);
+                    dynamic result = await _auth.signInGoogle();
+                    if (result == null) {
+                      setState(() {
+                        loading = false;
+                        error = "Couldn't sign in with those credential";
+                      });
+                    }
+                  },
+                  child: Text("Sign In With Google", style: TextStyle(color: Colors.grey))
+                ),
               ),
               SizedBox(height: 12.0),
               Text(error, style: TextStyle(color: Colors.red, fontSize: 14.0))

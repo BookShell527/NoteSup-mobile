@@ -28,6 +28,7 @@ class _RegisterState extends State<Register> {
     return loading ? Loading() : Scaffold(
       appBar: AppBar(title: Text("Register"), centerTitle: true),
       body: Container(
+        color: Colors.grey[200],
         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
         child: Form(
           key: _formkey,
