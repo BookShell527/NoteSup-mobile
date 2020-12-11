@@ -1,5 +1,8 @@
-import 'package:NoteSup/shared/constant.dart';
+import 'package:NoteSup/models/user.dart';
+import 'package:NoteSup/services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:NoteSup/screen/components/add_note_popup.dart';
+import 'package:provider/provider.dart';
 
 class Note extends StatefulWidget {
   @override
@@ -7,26 +10,33 @@ class Note extends StatefulWidget {
 }
 
 class _NoteState extends State<Note> {
+  final formkey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Note"),
-        centerTitle: true,
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-        child: Column(
-          children: <Widget>[
-            
-          ],
+    final user = Provider.of<TheUser>(context);
+    return StreamProvider<List>.value(
+      value: DatabaseService(uid: user.uid).note,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Note"),
+          centerTitle: true,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.add),
-        backgroundColor: Colors.purple,
-      ),
+        body: Container(
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AddNotePopup();
+              }
+            );
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Colors.purple,
+        ),
+      )
     );
   }
 }
