@@ -21,6 +21,9 @@ class _AddNotePopupState extends State<AddNotePopup> {
 
   final DatabaseService _database = DatabaseService();
 
+  Color currentColor = Colors.purple[200];
+  void changeColor(Color color) => setState(() => currentColor = color);
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -61,8 +64,11 @@ class _AddNotePopupState extends State<AddNotePopup> {
                     onChanged: (value) => _currentBody = value,
                     validator: (value) => value.isEmpty ? "Enter a note" : null,
                     minLines: 2,
-                    maxLines: null
+                    maxLines: null,
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),

@@ -1,9 +1,6 @@
-import 'package:NoteSup/models/user.dart';
 import 'package:NoteSup/screen/home/contact_us.dart';
 import 'package:NoteSup/screen/home/settings.dart';
-import 'package:NoteSup/services/database.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:NoteSup/screen/home/note.dart' as Note;
 
 class Home extends StatefulWidget {
@@ -44,9 +41,6 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<TheUser>(context);
-    final DatabaseService _database = DatabaseService(uid: user.uid);
-
     return Scaffold(
       backgroundColor: Colors.grey[50],
       bottomNavigationBar: BottomNavigationBar(
