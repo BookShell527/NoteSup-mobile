@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DatabaseService {
   final String uid;
@@ -7,8 +8,8 @@ class DatabaseService {
   final CollectionReference noteCollection = FirebaseFirestore.instance.collection("note");
   final CollectionReference messageCollection = FirebaseFirestore.instance.collection("message");
 
-  Future sendMessage(String email, String name, String message) async {
-    return await messageCollection.doc(uid).set({'email': email, 'name': name, 'message': message});
+  Future sendMessage(String message) async {
+    return await messageCollection.doc(uid).set({'email': FirebaseAuth.instance.currentUser.email, 'message': message});
   }
 
   Future addNote(String uid, String title, String body, int color) async {

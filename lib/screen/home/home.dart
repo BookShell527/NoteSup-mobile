@@ -38,10 +38,12 @@ class _HomeState extends State<Home> {
     });
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.grey[50],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentSelectedIndex,
@@ -70,7 +72,7 @@ class _HomeState extends State<Home> {
           },
           children: _widgetOptions
         ),
-      ),
+      )
     );
   }
 }

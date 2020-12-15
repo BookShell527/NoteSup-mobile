@@ -1,8 +1,11 @@
 import 'package:NoteSup/models/user.dart';
 import 'package:NoteSup/screen/components/show_note.dart';
+import 'package:NoteSup/screen/home/contact_us.dart';
+import 'package:NoteSup/services/auth.dart';
 import 'package:NoteSup/services/database.dart';
 import 'package:NoteSup/shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:NoteSup/screen/components/add_note_popup.dart';
 import 'package:provider/provider.dart';
@@ -49,6 +52,43 @@ class _NoteState extends State<Note> {
           appBar: AppBar(
             title: Text("Note"),
             centerTitle: true,
+          ),
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white
+                    ),
+                    child: FirebaseAuth.instance.currentUser.photoURL.isNotEmpty ? Image.network(FirebaseAuth.instance.currentUser.photoURL.toString(), fit: BoxFit.contain) : Image.asset("assets/person.png"),
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.purple,
+                  ),
+                ),
+                ListTile(
+                  title: Text('Email'),
+                  subtitle: Text(FirebaseAuth.instance.currentUser.email),
+                ),
+                Divider(height: 1.0, color: Colors.grey),
+                ListTile(
+                  title: Text('Contact Us'),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ContactUs()));
+                  },
+                ),
+                Divider(height: 1.0, color: Colors.grey),
+                ListTile(
+                  title: Text('SignOut'),
+                  onTap: () async {
+                    await AuthService().signOut();
+                  }
+                )
+              ],
+            ),
           ),
           body: GridView.count(
             crossAxisCount: 2,
