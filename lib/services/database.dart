@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:uuid/uuid.dart';
 
 class DatabaseService {
   final String uid;
@@ -12,12 +11,21 @@ class DatabaseService {
     return await messageCollection.doc(uid).set({'email': email, 'name': name, 'message': message});
   }
 
-  Future addNote(String uid, String title, String body) async {
+  Future addNote(String uid, String title, String body, int color) async {
     return await noteCollection.doc().set({
       'uid': uid,
       'title': title,
       'body': body,
-      'important': false
+      'important': false,
+      'color': color
     });
+  }
+
+  Future deleteNote(String documentID) async  {
+    await DatabaseService(uid: uid).noteCollection.doc(documentID).delete();
+  }
+
+  Future toggleImportant(String documentID, bool important) async {
+    await DatabaseService(uid: uid).noteCollection.doc(documentID).update({"important": !important});
   }
 }

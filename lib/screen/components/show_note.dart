@@ -1,6 +1,7 @@
 import 'package:NoteSup/models/user.dart';
 import 'package:NoteSup/services/database.dart';
 import 'package:NoteSup/shared/loading.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +19,7 @@ class _ShowNoteState extends State<ShowNote> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
     return StreamBuilder(
-      stream: DatabaseService(uid: user.uid).noteCollection.doc(widget.documentID).snapshots() ?? null,
+      stream: DatabaseService(uid: user.uid).noteCollection.where(FieldPath.documentId, isEqualTo: widget.documentID).snapshots() ?? null,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Column(
@@ -37,7 +38,7 @@ class _ShowNoteState extends State<ShowNote> {
                     child: IconButton(
                       icon: Icon(snapshot.data.docs[0].data()['important'] ? Icons.star : Icons.star_border, color: Colors.lightBlue),
                       onPressed: () async {
-                        
+                        await DatabaseService(uid: user.uid).toggleImportant(widget.documentID, snapshot.data.docs[0].data()['important']);
                       },
                     ), 
                   ),
@@ -46,7 +47,7 @@ class _ShowNoteState extends State<ShowNote> {
                       icon: Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
                         Navigator.pop(context);
-                        await DatabaseService(uid: user.uid).noteCollection.doc(snapshot.data.docs[0].id).delete();
+                        await DatabaseService(uid: user.uid).deleteNote(snapshot.data.docs[0].id);
                       },
                     ), 
                   ),

@@ -23,6 +23,7 @@ class _AddNotePopupState extends State<AddNotePopup> {
 
   Color currentColor = Colors.purple[200];
   void changeColor(Color color) => setState(() => currentColor = color);
+  List<Color> colorChoice = <Color>[Colors.purple[100], Colors.red[100], Colors.green[100], Colors.blue[100], Colors.yellow[100]];
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +70,29 @@ class _AddNotePopupState extends State<AddNotePopup> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(message, style: TextStyle(color: Colors.green)),
+                  child: Row(
+                    children: colorChoice.map((Color e) {
+                      return Expanded(
+                        child: GestureDetector(
+                          child: Container(
+                            height: 20.0,
+                            width: 20.0,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: e == currentColor ? Colors.black : Colors.grey,
+                                width: e == currentColor ? 2 : 1.5
+                              ),
+                              color: e
+                            ),
+                          ),
+                          onTap: () {
+                            changeColor(e);
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -82,7 +102,7 @@ class _AddNotePopupState extends State<AddNotePopup> {
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         setState(() => loading = true);
-                        await _database.addNote(user.uid, _currentTitle, _currentBody);
+                        await _database.addNote(user.uid, _currentTitle, _currentBody, currentColor.value);
                         setState(() {
                           message = "Note added successfully";
                           loading = false;
@@ -90,7 +110,8 @@ class _AddNotePopupState extends State<AddNotePopup> {
                       }
                     },
                   ),
-                )
+                ),
+                Text(message, style: TextStyle(color: Colors.green))
               ],
             ),
           ),

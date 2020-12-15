@@ -19,13 +19,16 @@ class _NoteState extends State<Note> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
-    void _showBottomModal(String documentID) {
+    void _showBottomModal(String documentID, int color) {
       showModalBottomSheet(
         context: context, 
         builder: (BuildContext context) {
           return Container(
             padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-            child: ShowNote(documentID: documentID)
+            child: ShowNote(documentID: documentID),
+            decoration: BoxDecoration(
+              color: Color(color)
+            ),
           );
         }
       );
@@ -54,13 +57,14 @@ class _NoteState extends State<Note> {
             padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
             children: snapshot.data.docs.map((DocumentSnapshot document) {
               return GestureDetector(
-                  onTap: () => _showBottomModal(document.id),
-                  child: Container(
+                onTap: () => _showBottomModal(document.id, document.data()['color']),
+                child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.grey[500],
                     ),
-                    borderRadius: BorderRadius.circular(12)
+                    borderRadius: BorderRadius.circular(12),
+                    color: Color(document.data()['color'])
                   ),
                   padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
                   child: Column(
@@ -70,6 +74,20 @@ class _NoteState extends State<Note> {
                       SizedBox(height: 10.0),
                       Center(
                         child: Text(document.data()['body']),
+                      ),
+                      Spacer(),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            icon: Icon(document.data()['important'] ? Icons.star : Icons.star_border), 
+                            color: Colors.blue,
+                            splashColor: Colors.grey[200],
+                            onPressed: () async {
+                              await DatabaseService(uid: user.uid).toggleImportant(document.id, snapshot.data.docs[0].data()['important']);
+                            }
+                          ),
+                        ],
                       )
                     ],
                   )
