@@ -1,5 +1,6 @@
 import 'package:NoteSup/screen/home/contact_us.dart';
-import 'package:NoteSup/screen/home/settings.dart';
+import 'package:NoteSup/screen/home/important.dart';
+import 'package:NoteSup/screen/home/trash.dart';
 import 'package:flutter/material.dart';
 import 'package:NoteSup/screen/home/note.dart' as Note;
 
@@ -27,8 +28,8 @@ class _HomeState extends State<Home> {
 
   final List<Widget> _widgetOptions = <Widget>[
     Note.Note(),
-    ContactUs(),
-    Settings()
+    Important(),
+    Trash()
   ];
 
   void _onItemTapped(int index) {
@@ -49,16 +50,16 @@ class _HomeState extends State<Home> {
         currentIndex: _currentSelectedIndex,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.note),
+            label: 'All',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.call),
-            label: 'Contact Us',
+            icon: Icon(Icons.star),
+            label: 'Important',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.delete),
+            label: 'Trash',
           ),
         ],
         selectedItemColor: Colors.purple[800],

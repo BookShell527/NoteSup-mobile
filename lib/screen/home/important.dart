@@ -1,24 +1,18 @@
 import 'package:NoteSup/models/user.dart';
 import 'package:NoteSup/screen/components/drawer_menu.dart';
 import 'package:NoteSup/screen/components/show_note.dart';
-import 'package:NoteSup/screen/home/contact_us.dart';
-import 'package:NoteSup/services/auth.dart';
 import 'package:NoteSup/services/database.dart';
 import 'package:NoteSup/shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:NoteSup/screen/components/add_note_popup.dart';
 import 'package:provider/provider.dart';
 
-class Note extends StatefulWidget {
+class Important extends StatefulWidget {
   @override
-  _NoteState createState() => _NoteState();
+  ImportantState createState() => ImportantState();
 }
 
-class _NoteState extends State<Note> {
-  final formkey = GlobalKey<FormState>();
-
+class ImportantState extends State<Important> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
@@ -39,7 +33,7 @@ class _NoteState extends State<Note> {
     }
 
     return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseService(uid: user.uid).noteCollection.where("uid", isEqualTo: user.uid).where("inTrash", isEqualTo: false).snapshots(),
+      stream: DatabaseService(uid: user.uid).noteCollection.where("uid", isEqualTo: user.uid).where("important", isEqualTo: true).where("inTrash", isEqualTo: false).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text('Something went wrong');
@@ -51,13 +45,13 @@ class _NoteState extends State<Note> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text("Note"),
+            title: Text("Important"),
             centerTitle: true,
           ),
           drawer: DrawerMenu(),
           body: snapshot.data.docs.length == 0
         ? Center(
-          child: Text("No notes added", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
+          child: Text("No notes marked as important", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
         ) : GridView.count(
             crossAxisCount: 2,
             mainAxisSpacing: 10.0,
@@ -102,18 +96,6 @@ class _NoteState extends State<Note> {
                 ),
               );
             }).toList(),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AddNotePopup();
-                }
-              );
-            },
-            child: Icon(Icons.add),
-            backgroundColor: Colors.purple,
           ),
         );
       }

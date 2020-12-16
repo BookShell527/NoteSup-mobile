@@ -47,7 +47,7 @@ class _ShowNoteState extends State<ShowNote> {
                       icon: Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
                         Navigator.pop(context);
-                        await DatabaseService(uid: user.uid).deleteNote(snapshot.data.docs[0].id);
+                        await DatabaseService(uid: user.uid).toggleTrash(widget.documentID, snapshot.data.docs[0].data()['inTrash']);
                       },
                     ), 
                   ),

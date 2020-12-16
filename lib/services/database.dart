@@ -18,7 +18,8 @@ class DatabaseService {
       'title': title,
       'body': body,
       'important': false,
-      'color': color
+      'color': color,
+      'inTrash': false
     });
   }
 
@@ -28,5 +29,9 @@ class DatabaseService {
 
   Future toggleImportant(String documentID, bool important) async {
     await DatabaseService(uid: uid).noteCollection.doc(documentID).update({"important": !important});
+  }
+
+  Future toggleTrash(String documentID, bool inTrash) async {
+    await DatabaseService(uid: uid).noteCollection.doc(documentID).update({"inTrash": !inTrash});
   }
 }
