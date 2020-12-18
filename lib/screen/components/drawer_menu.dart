@@ -1,4 +1,7 @@
+import 'package:NoteSup/screen/home/archived.dart';
 import 'package:NoteSup/screen/home/contact_us.dart';
+import 'package:NoteSup/screen/home/home.dart';
+import 'package:NoteSup/screen/home/trash.dart';
 import 'package:NoteSup/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,6 +31,24 @@ class DrawerMenu extends StatelessWidget {
           ),
           Divider(height: 1.0, color: Colors.grey),
           ListTile(
+            title: Text('Home'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+            },
+          ),
+          ListTile(
+            title: Text('Archived'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Archived()));
+            },
+          ),
+          ListTile(
+            title: Text('Trash'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Trash()));
+            },
+          ),
+          ListTile(
             title: Text('Contact Us'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ContactUs()));
@@ -35,7 +56,7 @@ class DrawerMenu extends StatelessWidget {
           ),
           Divider(height: 1.0, color: Colors.grey),
           ListTile(
-            title: Text('SignOut'),
+            title: Text('Sign Out'),
             onTap: () async {
               await AuthService().signOut();
             }

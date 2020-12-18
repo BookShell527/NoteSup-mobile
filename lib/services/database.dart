@@ -19,19 +19,44 @@ class DatabaseService {
       'body': body,
       'important': false,
       'color': color,
-      'inTrash': false
+      'inTrash': false,
+      'createdDate': DateTime.now(),
+      'archived': false
     });
   }
 
   Future deleteNote(String documentID) async  {
-    await DatabaseService(uid: uid).noteCollection.doc(documentID).delete();
+    await noteCollection.doc(documentID).delete();
   }
 
   Future toggleImportant(String documentID, bool important) async {
-    await DatabaseService(uid: uid).noteCollection.doc(documentID).update({"important": !important});
+    await noteCollection.doc(documentID).update({"important": !important});
   }
 
   Future toggleTrash(String documentID, bool inTrash) async {
-    await DatabaseService(uid: uid).noteCollection.doc(documentID).update({"inTrash": !inTrash});
+    await noteCollection.doc(documentID).update({"inTrash": !inTrash});
+  }
+
+  Future toggleArchived(String documentID, bool archived) async {
+    await noteCollection.doc(documentID).update({"archived": !archived});
+  }
+
+  Future deleteAll(String uid) async {
+    await noteCollection.get().then((snapshot) async {
+      List<DocumentSnapshot> allDocs = snapshot.docs;
+      List<DocumentSnapshot> filteredDocs = allDocs.where((document) => document.data()['uid'] == uid).where((document) => document.data()['inTrash'] == true).toList();
+
+      for (DocumentSnapshot ds in filteredDocs) {
+        await ds.reference.delete();
+      }
+    });
+  }
+
+  Future updateNote(String documentID, String title, String body, int color) async {
+    await noteCollection.doc(documentID).update({
+      'title': title,
+      'body': body,
+      'color': color
+    });
   }
 }

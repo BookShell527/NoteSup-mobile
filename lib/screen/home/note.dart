@@ -1,12 +1,10 @@
 import 'package:NoteSup/models/user.dart';
 import 'package:NoteSup/screen/components/drawer_menu.dart';
 import 'package:NoteSup/screen/components/show_note.dart';
-import 'package:NoteSup/screen/home/contact_us.dart';
-import 'package:NoteSup/services/auth.dart';
 import 'package:NoteSup/services/database.dart';
 import 'package:NoteSup/shared/loading.dart';
+import 'package:NoteSup/shared/show_bottom_modal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:NoteSup/screen/components/add_note_popup.dart';
 import 'package:provider/provider.dart';
@@ -23,23 +21,8 @@ class _NoteState extends State<Note> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
 
-    void _showBottomModal(String documentID, int color) {
-      showModalBottomSheet(
-        context: context, 
-        builder: (BuildContext context) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
-            child: ShowNote(documentID: documentID),
-            decoration: BoxDecoration(
-              color: Color(color)
-            ),
-          );
-        }
-      );
-    }
-
     return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseService(uid: user.uid).noteCollection.where("uid", isEqualTo: user.uid).where("inTrash", isEqualTo: false).snapshots(),
+      stream: DatabaseService(uid: user.uid).noteCollection.where("uid", isEqualTo: user.uid).where("inTrash", isEqualTo: false).where("archived", isEqualTo: false).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text('Something went wrong');
@@ -51,21 +34,21 @@ class _NoteState extends State<Note> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text("Note"),
+            title: Text("All Note"),
             centerTitle: true,
           ),
           drawer: DrawerMenu(),
-          body: snapshot.data.docs.length == 0
-        ? Center(
-          child: Text("No notes added", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
-        ) : GridView.count(
+          body: snapshot.data.docs.length == 0 ? Center(
+            child: Text("No notes added", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
+          ) : 
+          GridView.count(
             crossAxisCount: 2,
             mainAxisSpacing: 10.0,
             crossAxisSpacing: 10.0,
             padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
             children: snapshot.data.docs.map((DocumentSnapshot document) {
               return GestureDetector(
-                onTap: () => _showBottomModal(document.id, document.data()['color']),
+                onTap: () => showBottomModal(document.id, document.data()['color'], context),
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -108,7 +91,7 @@ class _NoteState extends State<Note> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AddNotePopup();
+                  return AddNotePopup(edit: false);
                 }
               );
             },

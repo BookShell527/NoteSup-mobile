@@ -1,4 +1,5 @@
 import 'package:NoteSup/models/user.dart';
+import 'package:NoteSup/screen/components/add_note_popup.dart';
 import 'package:NoteSup/services/database.dart';
 import 'package:NoteSup/shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,12 +34,41 @@ class _ShowNoteState extends State<ShowNote> {
               Spacer(),
               Row(
                 children: <Widget>[
-                  Expanded(child: Icon(Icons.edit, color: Colors.orangeAccent)),
+                  Expanded(
+                    child: IconButton(
+                      icon: Icon(Icons.edit), 
+                      color: Colors.orangeAccent,
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AddNotePopup(
+                              edit: true,
+                              passedTitle: snapshot.data.docs[0].data()['title'],
+                              passedBody: snapshot.data.docs[0].data()['body'],
+                              documentID: widget.documentID,
+                              passedColor: Color(snapshot.data.docs[0].data()['color']),
+                            );
+                          }
+                        );
+                      },
+                    ),
+                  ),
                   Expanded(
                     child: IconButton(
                       icon: Icon(snapshot.data.docs[0].data()['important'] ? Icons.star : Icons.star_border, color: Colors.lightBlue),
                       onPressed: () async {
                         await DatabaseService(uid: user.uid).toggleImportant(widget.documentID, snapshot.data.docs[0].data()['important']);
+                      },
+                    ), 
+                  ),
+                  Expanded(
+                    child: IconButton(
+                      icon: Icon(Icons.archive, color: Colors.green[700]),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        await DatabaseService(uid: user.uid).toggleArchived(widget.documentID, snapshot.data.docs[0].data()['archived']);
                       },
                     ), 
                   ),

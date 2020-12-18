@@ -7,6 +7,13 @@ import 'package:provider/provider.dart';
 
 
 class AddNotePopup extends StatefulWidget {
+  final bool edit;
+  final String passedTitle;
+  final String passedBody;
+  final String documentID;
+  final Color passedColor;
+
+  AddNotePopup({this.documentID, this.edit, this.passedBody, this.passedTitle, this.passedColor});
   @override
   _AddNotePopupState createState() => _AddNotePopupState();
 }
@@ -18,10 +25,23 @@ class _AddNotePopupState extends State<AddNotePopup> {
   String _currentBody = "";
   String message = "";
   bool loading = false;
+  Color currentColor = Colors.purple[100];
+
+  final TextEditingController txt1 = TextEditingController();
+  final TextEditingController txt2 = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _currentTitle = widget.edit ? widget.passedTitle : "";
+    _currentBody = widget.edit ? widget.passedBody : "";
+    currentColor = widget.edit ? widget.passedColor : Colors.purple[100];
+    txt1.text = widget.passedTitle;
+    txt2.text = widget.passedBody;
+  }
 
   final DatabaseService _database = DatabaseService();
 
-  Color currentColor = Colors.purple[200];
   void changeColor(Color color) => setState(() => currentColor = color);
   List<Color> colorChoice = <Color>[Colors.purple[100], Colors.red[100], Colors.green[100], Colors.blue[100], Colors.yellow[100]];
 
@@ -55,7 +75,8 @@ class _AddNotePopupState extends State<AddNotePopup> {
                   child: TextFormField(
                     decoration: textFormFieldDecoration.copyWith(hintText: "Title"),
                     onChanged: (value) => _currentTitle = value,
-                    validator: (value) => value.isEmpty ? "Enter a title" : null
+                    validator: (value) => value.isEmpty ? "Enter a title" : null,
+                    controller: txt1,
                   ),
                 ),
                 Padding(
@@ -66,6 +87,7 @@ class _AddNotePopupState extends State<AddNotePopup> {
                     validator: (value) => value.isEmpty ? "Enter a note" : null,
                     minLines: 2,
                     maxLines: null,
+                    controller: txt2,
                   ),
                 ),
                 Padding(
@@ -98,15 +120,20 @@ class _AddNotePopupState extends State<AddNotePopup> {
                   padding: const EdgeInsets.all(8.0),
                   child: RaisedButton(
                     color: Colors.purple,
-                    child: Text("Add Note", style: TextStyle(color: Colors.white)),
+                    child: Text("${widget.edit ? "Update" : "Add"} Note", style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       if (_formKey.currentState.validate()) {
                         setState(() => loading = true);
-                        await _database.addNote(user.uid, _currentTitle, _currentBody, currentColor.value);
+                        if (widget.edit) {
+                          await _database.updateNote(widget.documentID, _currentTitle, _currentBody, currentColor.value);
+                        } else {
+                          await _database.addNote(user.uid, _currentTitle, _currentBody, currentColor.value);
+                        }
                         setState(() {
-                          message = "Note added successfully";
+                          message = "Note ${widget.edit ? "updated" : "added"} successfully";
                           loading = false;
                         });
+                        Navigator.pop(context);
                       }
                     },
                   ),

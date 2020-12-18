@@ -32,7 +32,6 @@ class _TrashState extends State<Trash> {
             title: Text("Trash"),
             centerTitle: true,
           ),
-          drawer: DrawerMenu(),
           body: snapshot.data.docs.length == 0
         ? Center(
           child: Text("No notes moved to trash", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
@@ -85,8 +84,34 @@ class _TrashState extends State<Trash> {
                   ],
                 )
               );
-            }).toList(),
-          )
+            }).toList()
+          ),
+          floatingActionButton: snapshot.data.docs.length == 0 ? null : FloatingActionButton.extended(
+            label: Text("Delete All"),
+            icon: Icon(Icons.delete),
+            backgroundColor: Colors.red,
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text("Delete All Notes"),
+                    content: Text("Are you sure?"),
+                    actions: <Widget>[
+                      FlatButton(onPressed: () => Navigator.pop(context), child: Text("No", style: TextStyle(color: Colors.blue))),
+                      FlatButton(
+                        onPressed: () async {
+                          await DatabaseService(uid: user.uid).deleteAll(user.uid);
+                          Navigator.pop(context);
+                        },
+                        child: Text("Yes", style: TextStyle(color: Colors.red))
+                      ),
+                    ],
+                  );
+                }
+              );
+            },
+          ),
         );
       }
     );

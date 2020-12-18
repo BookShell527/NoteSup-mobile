@@ -1,5 +1,6 @@
 import 'package:NoteSup/screen/home/contact_us.dart';
 import 'package:NoteSup/screen/home/important.dart';
+import 'package:NoteSup/screen/home/shared.dart';
 import 'package:NoteSup/screen/home/trash.dart';
 import 'package:flutter/material.dart';
 import 'package:NoteSup/screen/home/note.dart' as Note;
@@ -25,11 +26,10 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
-
   final List<Widget> _widgetOptions = <Widget>[
     Note.Note(),
     Important(),
-    Trash()
+    Shared()
   ];
 
   void _onItemTapped(int index) {
@@ -58,8 +58,8 @@ class _HomeState extends State<Home> {
             label: 'Important',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.delete),
-            label: 'Trash',
+            icon: Icon(Icons.folder_shared),
+            label: 'Shared',
           ),
         ],
         selectedItemColor: Colors.purple[800],

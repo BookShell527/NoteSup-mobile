@@ -1,6 +1,4 @@
 import 'package:NoteSup/models/user.dart';
-import 'package:NoteSup/screen/components/drawer_menu.dart';
-import 'package:NoteSup/screen/components/show_note.dart';
 import 'package:NoteSup/services/database.dart';
 import 'package:NoteSup/shared/loading.dart';
 import 'package:NoteSup/shared/show_bottom_modal.dart';
@@ -8,18 +6,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Important extends StatefulWidget {
+class Archived extends StatefulWidget {
   @override
-  ImportantState createState() => ImportantState();
+  _ArchivedState createState() => _ArchivedState();
 }
 
-class ImportantState extends State<Important> {
+class _ArchivedState extends State<Archived> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
-
     return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseService(uid: user.uid).noteCollection.where("uid", isEqualTo: user.uid).where("important", isEqualTo: true).where("inTrash", isEqualTo: false).snapshots(),
+      stream: DatabaseService(uid: user.uid).noteCollection.where("uid", isEqualTo: user.uid).where("inTrash", isEqualTo: false).where("archived", isEqualTo: true).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text('Something went wrong');
@@ -31,14 +28,14 @@ class ImportantState extends State<Important> {
 
         return Scaffold(
           appBar: AppBar(
-            title: Text("Important"),
+            title: Text("Archived"),
             centerTitle: true,
           ),
-          drawer: DrawerMenu(),
           body: snapshot.data.docs.length == 0
         ? Center(
-          child: Text("No notes marked as important", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
-        ) : GridView.count(
+          child: Text("No notes archived", textAlign: TextAlign.center, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0)),
+        ) : 
+          GridView.count(
             crossAxisCount: 2,
             mainAxisSpacing: 10.0,
             crossAxisSpacing: 10.0,
@@ -81,7 +78,7 @@ class ImportantState extends State<Important> {
                   )
                 ),
               );
-            }).toList(),
+            }).toList()
           ),
         );
       }
