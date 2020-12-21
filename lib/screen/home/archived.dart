@@ -2,6 +2,7 @@ import 'package:NoteSup/models/user.dart';
 import 'package:NoteSup/services/database.dart';
 import 'package:NoteSup/shared/loading.dart';
 import 'package:NoteSup/shared/show_bottom_modal.dart';
+import 'package:NoteSup/shared/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ class _ArchivedState extends State<Archived> {
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
     return StreamBuilder<QuerySnapshot>(
-      stream: DatabaseService(uid: user.uid).noteCollection.where("uid", isEqualTo: user.uid).where("inTrash", isEqualTo: false).where("archived", isEqualTo: true).snapshots(),
+      stream: DatabaseService(uid: user.uid).noteCollection.orderBy("important", descending: true).where("uid", isEqualTo: user.uid).where("inTrash", isEqualTo: false).where("archived", isEqualTo: true).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
           return Text('Something went wrong');
@@ -63,16 +64,26 @@ class _ArchivedState extends State<Archived> {
                       Spacer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 12.0, 0),
+                            child: Text(ago(document.data()['createdDate'])),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.archive, color: Colors.green[700]),
+                            onPressed: () async {
+                              await DatabaseService(uid: user.uid).toggleArchived(document.id, snapshot.data.docs[0].data()['archived']);
+                            },
+                          ),
                           IconButton(
                             icon: Icon(document.data()['important'] ? Icons.star : Icons.star_border), 
                             color: Colors.blue,
                             splashColor: Colors.grey[200],
                             onPressed: () async {
-                              await DatabaseService(uid: user.uid).toggleImportant(document.id, snapshot.data.docs[0].data()['important']);
+                              await DatabaseService(uid: user.uid).toggleImportant(document.id, document.data()['important']);
                             }
                           ),
-                        ],
+                        ], 
                       )
                     ],
                   )

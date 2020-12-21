@@ -1,6 +1,7 @@
 import 'package:NoteSup/models/user.dart';
 import 'package:NoteSup/screen/components/add_note_popup.dart';
 import 'package:NoteSup/services/database.dart';
+import 'package:NoteSup/shared/constant.dart';
 import 'package:NoteSup/shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +16,18 @@ class ShowNote extends StatefulWidget {
 }
 
 class _ShowNoteState extends State<ShowNote> {
+  final TextEditingController txt = TextEditingController();
+  String message = "";
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);
+
+    final DatabaseService _database = DatabaseService(uid: user.uid);
+
     return StreamBuilder(
-      stream: DatabaseService(uid: user.uid).noteCollection.where(FieldPath.documentId, isEqualTo: widget.documentID).snapshots() ?? null,
+      stream: _database.noteCollection.where(FieldPath.documentId, isEqualTo: widget.documentID).snapshots() ?? null,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Column(
@@ -59,7 +66,7 @@ class _ShowNoteState extends State<ShowNote> {
                     child: IconButton(
                       icon: Icon(snapshot.data.docs[0].data()['important'] ? Icons.star : Icons.star_border, color: Colors.lightBlue),
                       onPressed: () async {
-                        await DatabaseService(uid: user.uid).toggleImportant(widget.documentID, snapshot.data.docs[0].data()['important']);
+                        await _database.toggleImportant(widget.documentID, snapshot.data.docs[0].data()['important']);
                       },
                     ), 
                   ),
@@ -68,7 +75,7 @@ class _ShowNoteState extends State<ShowNote> {
                       icon: Icon(Icons.archive, color: Colors.green[700]),
                       onPressed: () async {
                         Navigator.pop(context);
-                        await DatabaseService(uid: user.uid).toggleArchived(widget.documentID, snapshot.data.docs[0].data()['archived']);
+                        await _database.toggleArchived(widget.documentID, snapshot.data.docs[0].data()['archived']);
                       },
                     ), 
                   ),
@@ -77,7 +84,7 @@ class _ShowNoteState extends State<ShowNote> {
                       icon: Icon(Icons.delete, color: Colors.red),
                       onPressed: () async {
                         Navigator.pop(context);
-                        await DatabaseService(uid: user.uid).toggleTrash(widget.documentID, snapshot.data.docs[0].data()['inTrash']);
+                        await _database.toggleTrash(widget.documentID, snapshot.data.docs[0].data()['inTrash']);
                       },
                     ), 
                   ),

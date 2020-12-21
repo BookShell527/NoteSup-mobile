@@ -21,7 +21,7 @@ class DatabaseService {
       'color': color,
       'inTrash': false,
       'createdDate': DateTime.now(),
-      'archived': false
+      'archived': false,
     });
   }
 

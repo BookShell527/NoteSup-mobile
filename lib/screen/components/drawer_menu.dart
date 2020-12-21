@@ -19,7 +19,7 @@ class DrawerMenu extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Colors.white
               ),
-              child: FirebaseAuth.instance.currentUser.photoURL.isNotEmpty ? Image.network(FirebaseAuth.instance.currentUser.photoURL.toString(), fit: BoxFit.contain) : Image.asset("assets/person.png"),
+              child: FirebaseAuth.instance.currentUser.photoURL == null || FirebaseAuth.instance.currentUser.photoURL.isEmpty ? Image.asset("assets/person.png") : Image.network(FirebaseAuth.instance.currentUser.photoURL.toString(), fit: BoxFit.contain),
             ),
             decoration: BoxDecoration(
               color: Colors.purple,
