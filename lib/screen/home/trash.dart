@@ -1,5 +1,4 @@
 import 'package:NoteSup/models/user.dart';
-import 'package:NoteSup/screen/components/drawer_menu.dart';
 import 'package:NoteSup/services/database.dart';
 import 'package:NoteSup/shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,7 +11,6 @@ class Trash extends StatefulWidget {
 }
 
 class _TrashState extends State<Trash> {
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<TheUser>(context);

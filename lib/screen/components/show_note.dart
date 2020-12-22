@@ -1,7 +1,6 @@
 import 'package:NoteSup/models/user.dart';
 import 'package:NoteSup/screen/components/add_note_popup.dart';
 import 'package:NoteSup/services/database.dart';
-import 'package:NoteSup/shared/constant.dart';
 import 'package:NoteSup/shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

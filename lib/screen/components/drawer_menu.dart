@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class DrawerMenu extends StatelessWidget {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -19,7 +20,7 @@ class DrawerMenu extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Colors.white
               ),
-              child: FirebaseAuth.instance.currentUser.photoURL == null || FirebaseAuth.instance.currentUser.photoURL.isEmpty ? Image.asset("assets/person.png") : Image.network(FirebaseAuth.instance.currentUser.photoURL.toString(), fit: BoxFit.contain),
+              child: _auth.currentUser.photoURL == null || _auth.currentUser.photoURL.isEmpty ? Image.asset("assets/person.png") : Image.network(_auth.currentUser.photoURL.toString(), fit: BoxFit.contain),
             ),
             decoration: BoxDecoration(
               color: Colors.purple,
@@ -27,7 +28,7 @@ class DrawerMenu extends StatelessWidget {
           ),
           ListTile(
             title: Text('Email'),
-            subtitle: Text(FirebaseAuth.instance.currentUser.email),
+            subtitle: Text(_auth.currentUser.email),
           ),
           Divider(height: 1.0, color: Colors.grey),
           ListTile(
