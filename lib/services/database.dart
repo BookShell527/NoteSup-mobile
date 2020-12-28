@@ -20,7 +20,6 @@ class DatabaseService {
       'important': false,
       'color': color,
       'inTrash': false,
-      'createdDate': DateTime.now(),
       'archived': false,
     });
   }

@@ -6,7 +6,6 @@ import 'package:NoteSup/shared/loading.dart';
 import 'package:NoteSup/shared/show_bottom_modal.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:NoteSup/shared/constant.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -74,20 +73,16 @@ class _HomeState extends State<Home> {
                       Text(document.data()['title'], style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
                       SizedBox(height: 10.0),
                       Center(
-                        child: Text(document.data()['body']),
+                        child: document.data()['body'].length > 122 ? Text(document.data()['body'].substring(0, 121) + "...") :Text(document.data()['body']),
                       ),
                       Spacer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 12.0, 0),
-                            child: Text(ago(document.data()['createdDate'])),
-                          ),
                           IconButton(
                             icon: Icon(document.data()['important'] ? Icons.star : Icons.star_border), 
                             color: Colors.blue,
-                            splashColor: Colors.grey[200],
+                            splashColor: Colors.white,
                             onPressed: () async {
                               await DatabaseService(uid: user.uid).toggleImportant(document.id, document.data()['important']);
                             }

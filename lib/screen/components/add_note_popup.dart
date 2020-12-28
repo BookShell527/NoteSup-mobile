@@ -50,7 +50,7 @@ class _AddNotePopupState extends State<AddNotePopup> {
     final user = Provider.of<TheUser>(context);
     return AlertDialog(
       content: loading ? Loading() : Stack(
-        overflow: Overflow.visible,
+        clipBehavior: Clip.hardEdge,
         children: <Widget>[
           Positioned(
             right: -40.0,

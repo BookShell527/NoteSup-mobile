@@ -1,24 +1,25 @@
 {
   "project_info": {
     "project_number": "1086198739687",
+    "firebase_url": "https://notesup-abcff-default-rtdb.firebaseio.com",
     "project_id": "notesup-abcff",
     "storage_bucket": "notesup-abcff.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1086198739687:android:d43cb672744e9533d72842",
+        "mobilesdk_app_id": "1:1086198739687:android:cb91daf14b983a72d72842",
         "android_client_info": {
           "package_name": "com.BookShell527.NoteSup"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1086198739687-5gms8dv6n978abok9dedflnnfufmjsa8.apps.googleusercontent.com",
+          "client_id": "1086198739687-mlvdemc70ke3qlhquu71ii32c8e9os8i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.BookShell527.NoteSup",
-            "certificate_hash": "7eedde88cf3c057b7374e581e903c7484107171d"
+            "certificate_hash": "ef255af726cbf89dd91547057e70cbfe84eef412"
           }
         },
         {

@@ -2,7 +2,6 @@ import 'package:NoteSup/models/user.dart';
 import 'package:NoteSup/services/database.dart';
 import 'package:NoteSup/shared/loading.dart';
 import 'package:NoteSup/shared/show_bottom_modal.dart';
-import 'package:NoteSup/shared/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -65,10 +64,6 @@ class _ArchivedState extends State<Archived> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 0, 12.0, 0),
-                            child: Text(ago(document.data()['createdDate'])),
-                          ),
                           IconButton(
                             icon: Icon(Icons.archive, color: Colors.green[700]),
                             onPressed: () async {
